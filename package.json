@@ -10,7 +10,8 @@
     "pack": "build --dir",
     "dist": "build",
     "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder"
+    "app:dist": "electron-builder",
+    "release": "electron-builder"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +19,14 @@
     "appId": "pl.grulka.secureedit",
     "mac": {
       "category": "public.app-category.productivity",
-      "icon": "app/build/icon.png"
+      "icon": "app/build/icon.png",
+      "publish": ["github"]
+    },
+    "win": {
+      "publish": ["github"]
+    },
+    "linux": {
+      "publish": ["github"]
     }
   },
   "devDependencies": {

@@ -14,7 +14,7 @@ jobs:
     - name: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run app:dist
+      run: npm run release
 
   build_on_mac:
     runs-on: macos-latest
@@ -28,7 +28,7 @@ jobs:
     - name: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
-      run: npm run app:dist
+      run: npm run release
 
   build_on_win:
     runs-on: windows-latest
@@ -42,4 +42,4 @@ jobs:
     - name: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run app:dist
+      run: npm run release
