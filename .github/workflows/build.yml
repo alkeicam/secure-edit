@@ -12,6 +12,8 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run app:dist
 
   build_on_mac:
@@ -24,6 +26,8 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       run: npm run app:dist
 
   build_on_win:
@@ -36,4 +40,6 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run app:dist
