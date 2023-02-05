@@ -4,7 +4,7 @@ Create and edit aes encrypted text files.
 
 ## Installation
 
-Download latest version from [Releases page](/releases). Enjoy.
+Download latest version from [Releases page](../../releases). Enjoy.
 
 ## Usage
 
