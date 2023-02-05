@@ -1,6 +1,6 @@
 {
   "name": "secure-edit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Secure Text Editor with AES Encryption",
   "main": "main.js",
   "productName": "SecureEdit",
@@ -21,13 +21,19 @@
     "mac": {
       "category": "public.app-category.productivity",
       "icon": "app/build/icon.png",
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     },
     "win": {
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     },
     "linux": {
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     }
   },
   "devDependencies": {
