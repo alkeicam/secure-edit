@@ -2,6 +2,7 @@
 
 Create and edit aes encrypted text files in a editor like fashion instead of command line openssl. 
 
+
 ## Installation
 
 Download latest version from [Releases page](../../releases/latest). Enjoy.
