@@ -1,6 +1,6 @@
 {
   "name": "secure-edit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Secure Text Editor with AES Encryption",
   "main": "main.js",
   "productName": "SecureEdit",
