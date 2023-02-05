@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "pack": "build --dir",
-    "dist": "build",
+    "dist:patch": "git commit -a -m \"version update\" && npm version patch && build",
+    "dist:minor": "npm version minor && build",
     "app:dir": "electron-builder --dir",
     "app:dist": "electron-builder",
     "release": "electron-builder"
