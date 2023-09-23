@@ -33,7 +33,7 @@ Command line encrypt:
 
 ## History
 
-* 1.0.7 Search & Replace added
+* 1.0.9 Search & Replace added
 * 1.0.6 Minor bugfixing
 * 1.0.0 Initial version
 
