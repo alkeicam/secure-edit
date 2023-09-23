@@ -158,6 +158,16 @@ class AppDemo {
               })
             //   'Paste Change input Undo Redo'
               editor.on("Paste input Change",(event, b)=>{
+
+                // 
+                if(event.type=="change"){
+                    // hack for find triggering
+                    if(event.lastLevel.content == '<p><br data-mce-bogus="1"></p>')
+                        return;
+                    // when no content is changed do not mark as dirty
+                    if(event.lastLevel.content == event.level.content)
+                        return;
+                } 
                 // console.log(editor.id);
                 // console.log(event, b);
                 that.model.editors.forEach((item)=>{
