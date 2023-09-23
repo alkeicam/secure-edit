@@ -2,6 +2,13 @@
 
 Create and edit aes encrypted text files in a editor like fashion instead of command line openssl. Exclusively for MacOs, Windows and Linux users.
 
+Key Features:
+* Multiplatform (MacOs, Windows, Linux)
+* Hardened encryption using Advanced Encryption Standard (AES) with 256-bit key length in Cipher Block Chaining mode (AES256-CBC), same as in the Microsoft Apps Suite [AES256-CBC support for Microsoft 365](https://learn.microsoft.com/en-us/purview/technical-reference-details-about-encryption#aes256-cbc-support-for-microsoft-365)
+* Network secure, 100% local. No data is transfered over network.
+* Fast and simple, only plain text is supported
+* Interoperability by design, compatible with other implementations of aes-256-cbc, no vendor lock.
+
 
 ## Installation
 
