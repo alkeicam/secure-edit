@@ -1,6 +1,6 @@
 # SecureEdit - AES/openssl compatible encrypted text editor
 
-Create and edit aes encrypted text files in a editor like fashion instead of command line openssl. 
+Create and edit aes encrypted text files in a editor like fashion instead of command line openssl. Exclusively for MacOs, Windows and Linux users.
 
 
 ## Installation
@@ -32,7 +32,7 @@ Command line encrypt:
 5. Submit a pull request :D
 
 ## History
-
+* 1.0.11 Stabilization fixes
 * 1.0.9 Search & Replace added
 * 1.0.6 Minor bugfixing
 * 1.0.0 Initial version
