@@ -21,8 +21,11 @@ Following operations are supported:
 * creating and saving new encrypted file
 * opening existing encrypted file
 * modifying and saving encrypted file
+* searching/replacing file contents
 
-SecureEdit is fully compatible (two way interchangeable) with openssl encrypted files:
+## Open and fully interoperable
+
+SecureEdit is fully compatible (two way interchangeable) with openssl `aes 256 cbc` encrypted files:
 
 Command line decrypt:
 
