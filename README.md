@@ -8,6 +8,7 @@ Key Features:
 * Network secure, 100% local. No data is transfered over network.
 * Fast and simple, only plain text is supported
 * Interoperability by design, compatible with other implementations of aes-256-cbc, no vendor lock.
+* Daily used in IT community, fully maintained.
 
 
 ## Installation
@@ -39,7 +40,7 @@ Command line encrypt:
 5. Submit a pull request :D
 
 ## History
-* 1.0.11 Stabilization fixes
+* 1.0.11 Stabilization tweaks, docs update
 * 1.0.9 Search & Replace added
 * 1.0.6 Minor bugfixing
 * 1.0.0 Initial version
