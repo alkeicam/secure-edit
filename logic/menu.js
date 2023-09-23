@@ -87,6 +87,7 @@ class AppMenu {
             },
             // { role: 'editMenu' }
             {
+              id: 'edit',
               label: 'Edit',
               submenu: [
                 { role: 'undo' },
@@ -95,6 +96,15 @@ class AppMenu {
                 { role: 'cut' },
                 { role: 'copy' },
                 { role: 'paste' },
+                // { role: 'search' },
+                {
+                  id: "mySearch",
+                  label: 'Find/Replace',
+                  accelerator: "CmdOrCtrl+F",
+                  click: async () => {                        
+                    BrowserWindow.fromId(1).webContents.send('listener_search');
+                  }
+                },
                 ...(isMac ? [
                   { role: 'pasteAndMatchStyle' },
                   { role: 'delete' },
@@ -221,6 +231,9 @@ class AppMenu {
                 }
             })
         }
+
+        // const mySearchMenuItem = this.configuration.find((item)=>item.id == "edit").submenu.find((item)=>item.id == "mySearch");
+
             
         return this.configuration;
     }

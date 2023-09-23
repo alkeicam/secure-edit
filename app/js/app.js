@@ -85,7 +85,12 @@ class AppDemo {
             electronAPI.seAPI.editorUIEvent("ui_dirty_count", a.model.editors.reduce((count,editor)=>{return editor.dirty?count+1:count},0));
         })
 
-        
+        electronAPI.listenerAPI.onSearch((_event)=>{
+            console.log(_event);
+
+            const activeEditor = a.model.editors.find(item=>item.active);
+            tinymce.get(activeEditor.id)?.execCommand('SearchReplace');            
+        })
         //
         
         await a.newEditor();
@@ -130,7 +135,8 @@ class AppDemo {
             menubar: false,
             statusbar: false,
             plugins: [
-              'advlist','autolink','lists','link','image','charmap','preview','anchor',
+                'searchreplace'
+            //   'advlist','autolink','lists','link','image','charmap','preview','anchor','searchreplace'
               // 'searchreplace visualblocks code fullscreen',
               // 'insertdatetime media table paste code help wordcount save'
                 //   'save'
@@ -151,7 +157,7 @@ class AppDemo {
                 contentHolder.content = contentHolder.content.replace(/\r?\n/g, '<br />');
               })
             //   'Paste Change input Undo Redo'
-              editor.on("Paste input",(event, b)=>{
+              editor.on("Paste input Change",(event, b)=>{
                 // console.log(editor.id);
                 // console.log(event, b);
                 that.model.editors.forEach((item)=>{
@@ -196,6 +202,8 @@ class AppDemo {
           if(fileMetadata?.contents) tinymce.get(id)?.setContent(fileMetadata?.contents, { format: 'text' });     
 
           electronAPI.seAPI.editorUIEvent("ui_dirty_count", that.model.editors.reduce((count,editor)=>{return editor.dirty?count+1:count},0));
+
+          
     }
 
     handleCloseErrorMessage(e, that){
