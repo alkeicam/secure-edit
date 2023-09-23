@@ -1,6 +1,6 @@
 {
   "name": "secure-edit",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Secure Text Editor with AES Encryption",
   "main": "main.js",
   "productName": "SecureEdit",
@@ -13,7 +13,7 @@
     "app:dir": "electron-builder --dir",
     "app:dist": "electron-builder",
     "release": "electron-builder",
-    "release:patch": "npm version patch && git push origin" 
+    "release:patch": "npm version patch && git push origin"
   },
   "author": "",
   "license": "ISC",
