@@ -13,7 +13,7 @@ Key Features:
 
 ## Installation
 
-Download latest version from [Releases page](../../releases/latest). Enjoy.
+Download encryption text editor's latest version from [Releases page](../../releases/latest). Enjoy.
 
 ## Usage
 
