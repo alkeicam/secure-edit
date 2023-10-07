@@ -5,7 +5,8 @@ class AppDemo {
         }
         this.emitter = emitter
 
-        
+        this.textMode = false;
+        this.contentParams = this.textMode?{format: 'text'}:{format: 'html'};
         
         
         this.model = {
@@ -59,7 +60,8 @@ class AppDemo {
         electronAPI.listenerAPI.onSaveFile((_event)=>{            
             const editor = a.model.editors.find((item)=>{return item.active == true});
             if(!editor.dirty) return;
-            const contents = tinymce.get(editor.id)?.getContent({ format: 'text' });
+            // const contents = tinymce.get(editor.id)?.getContent({ format: 'text' });
+            const contents = tinymce.get(editor.id)?.getContent(a.contentParams);
             _event.sender.send('listener_saveFile_response', contents, editor.fileMetadata)
         })
 
@@ -154,13 +156,18 @@ class AppDemo {
 
               editor.on("BeforeSetContent",(contentHolder)=>{
                 // for text files, treat new lines accordingly
-                contentHolder.content = contentHolder.content.replace(/\r?\n/g, '<br />');
+                if(that.textMode)
+                    contentHolder.content = contentHolder.content.replace(/\r?\n/g, '<br />');
               })
             //   'Paste Change input Undo Redo'
               editor.on("Paste input Change",(event, b)=>{
 
                 // 
                 if(event.type=="change"){
+                    // console.log("Original event", event.originalEvent?.type);
+                    // another hack for when file is saved, and marked as saved and not dirty when one tries to close then it becomes dirty...
+                    if(event.originalEvent&&event.originalEvent.type == "blur")
+                        return;
                     // hack for find triggering
                     if(event.lastLevel.content == '<p><br data-mce-bogus="1"></p>')
                         return;
@@ -187,7 +194,7 @@ class AppDemo {
                 text: 'Save',
                 icon: 'save',
                 onAction: function() {    
-                    const content = editor.getContent({ format: 'text' })   
+                    const content = editor.getContent(that.contentParams)   
                     // check if we are saving existing file
                     const editorData = that.model.editors.find((item)=>item.id == editor.id);                    
                     electronAPI.seAPI.saveFile(content, editorData.fileMetadata.fullPath);
@@ -197,9 +204,11 @@ class AppDemo {
                 text: 'Load',
                 icon: 'upload',
                 onAction: function() {                    
-                  editor.setContent("", { format: 'text' });
+                  editor.setContent("", that.contentParams);
                   electronAPI.seAPI.loadFile().then((contents)=>{
-                    editor.setContent(contents, { format: 'text' });
+                    // editor.setContent(contents, { format: 'text' });
+                    // console.log("Loading content", contents)
+                    editor.setContent(contents, that.contentParams);
                   })
                 }
             });
@@ -209,7 +218,10 @@ class AppDemo {
           tinymce.get(id)?.show();  
         //   tinymce.get(id)?.focus();
           // when editor is created for file contents, populate it
-          if(fileMetadata?.contents) tinymce.get(id)?.setContent(fileMetadata?.contents, { format: 'text' });     
+          if(fileMetadata?.contents) {
+            // console.log("Loading content from file metadata", fileMetadata?.contents)
+            tinymce.get(id)?.setContent(fileMetadata?.contents, that.contentParams);     
+          }
 
           electronAPI.seAPI.editorUIEvent("ui_dirty_count", that.model.editors.reduce((count,editor)=>{return editor.dirty?count+1:count},0));
 
@@ -231,7 +243,7 @@ class AppDemo {
     }
 
     handleCloseEditor(e, that){  
-        const content = tinymce.get(that.editor.id)?.getContent({ format: 'text' });
+        const content = tinymce.get(that.editor.id)?.getContent(that.contentParams);
         // that.editor - clicked editor object
         if(that.editor.dirty && content.length>0){
             console.log("dirty");                        

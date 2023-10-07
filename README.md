@@ -43,6 +43,7 @@ Command line encrypt:
 5. Submit a pull request :D
 
 ## History
+* 1.1.0 HTML support (tables, formatting)
 * 1.0.11 Stabilization tweaks, docs update
 * 1.0.9 Search & Replace added
 * 1.0.6 Minor bugfixing
