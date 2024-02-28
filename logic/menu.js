@@ -57,7 +57,8 @@ class AppMenu {
                         // add recent only when open was successfull
                         that.addRecent({
                             label: fileContents.fileName,
-                            fullPath: fileContents.fullPath
+                            fullPath: fileContents.fullPath,
+                            destination: fileContents.destination
                         })
                     }
                 },
@@ -215,7 +216,8 @@ class AppMenu {
                     BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);                                        
                     that.addRecent({
                         label: fileContents.fileName,
-                        fullPath: fileContents.fullPath
+                        fullPath: fileContents.fullPath,
+                        destination: fileContents.destination
                     })
                     
                 }

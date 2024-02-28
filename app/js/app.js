@@ -57,6 +57,7 @@ class AppDemo {
             
         })
 
+        // reacts to listener_saveFile event from main process
         electronAPI.listenerAPI.onSaveFile((_event)=>{            
             const editor = a.model.editors.find((item)=>{return item.active == true});
             if(!editor.dirty) return;
@@ -190,6 +191,7 @@ class AppDemo {
               //   }
               // });
 
+            // seems to be depracated, no longer used (electron js app menu is used instead of tinymce menu bar)
             editor.ui.registry.addMenuItem('seSaveMenuItem', {
                 text: 'Save',
                 icon: 'save',
@@ -197,9 +199,11 @@ class AppDemo {
                     const content = editor.getContent(that.contentParams)   
                     // check if we are saving existing file
                     const editorData = that.model.editors.find((item)=>item.id == editor.id);                    
+                    // seems to be an obsolete call, as full fileMetadata should be passed on to saveFile()
                     electronAPI.seAPI.saveFile(content, editorData.fileMetadata.fullPath);
                 }
             });
+            // seems to be depracated, no longer used (electron js app menu is used instead of tinymce menu bar)
             editor.ui.registry.addMenuItem('seLoadMenuItem', {
                 text: 'Load',
                 icon: 'upload',

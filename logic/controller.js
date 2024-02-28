@@ -36,7 +36,8 @@ ipcMain.on('listener_saveFile_response', async (_event, contents, fileMetadata) 
     const appMenu = new AppMenu();
     appMenu.addRecent({
         label: fileContents.fileName,
-        fullPath: fileContents.fullPath
+        fullPath: fileContents.fullPath,
+        destination: fileContents.destination
     })
 })
 
