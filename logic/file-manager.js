@@ -82,21 +82,35 @@ class FileManager {
 
     /**
      * 
-     * @param {FileMetadata} fileMetadata metadata without contents 
+     * @param {FileMetadata} fileMetadata metadata without contents and password
      * @returns {Promise<FileMetadata>} returns full file metadata with contents
      */
     async loadFile(fileMetadata){
         // console.log("Internal load file")
+        try{
 
-        if(this._isNewFileMetadata(fileMetadata)){
-            // we need to show file picker for user to choose which file to opern as we don't have file metadata
-            fileMetadata = await this.prepareOpenLocal(fileMetadata);
+            if(this._isNewFileMetadata(fileMetadata)){
+                // we need to show file picker for user to choose which file to opern as we don't have file metadata
+                fileMetadata = await this.prepareOpenLocal(fileMetadata);
+            }
+
+            fileMetadata = await this.preparePassword(fileMetadata);
+
+            if(fileMetadata.destination == "local"){
+                return this.loadFileLocal(fileMetadata)
+            }else{
+                return this.loadFileRemote(fileMetadata)
+            }
+
+        }catch(err){
+            console.error(err)
+            return {
+                error: err
+            }
         }
 
-        fileMetadata = this.preparePassword(fileMetadata);
 
-
-    
+    /*
         let contents = ``;
         let contentsPath = fileFullPath;
         try{
@@ -158,7 +172,7 @@ class FileManager {
                 error: err
             }
         }
-
+*/
         // return dialog.showOpenDialog({
         //     properties: ['openFile', 'openDirectory']
         // }).then(result => {
@@ -217,6 +231,70 @@ class FileManager {
         //         error: err
         //     }
         // })
+    }
+
+    /**
+     * 
+     * @param {FileMetadata} fileMetadata 
+     * @returns {Promise<FileMetadata>} with contents
+     */
+    async loadFileLocal(fileMetadata){
+        const contents = fs.readFileSync(fileMetadata.fullPath);
+        
+        return this.loadFilePostProcess(fileMetadata, contents);                
+    }
+
+    /**
+     * 
+     * @param {FileMetadata} fileMetadata 
+     * @returns {Promise<FileMetadata>} with contents
+     */
+    async loadFileRemote(fileMetadata){
+        fileMetadata = await this.loadContentsRemote(fileMetadata);
+
+        return this.loadFilePostProcess(fileMetadata, fileMetadata.contents);                
+    }
+
+    /**
+     * 
+     * @param {*} fileMetadata 
+     * @returns {Promise<FileMetadata>} with contents
+     */
+    async loadContentsRemote(fileMetadata){        
+        let remoteURL = fileMetadata.fullPath;
+
+        var headers = {
+            Authorization: `ApiKey-v1 ${this.CONST.API_KEY}`
+        }
+        
+        const response = await fetch(remoteURL, {method: 'GET', headers: headers});
+        this.checkValidFetchResponse(response);
+        const responseData = await response.json();
+        const resourceItem = responseData.item;
+        const contents = resourceItem.contents;
+        
+        fileMetadata.contents = contents;
+
+        return fileMetadata;    
+    }
+
+    /**
+     * 
+     * @param {FileMetadata} fileMetadata with password
+     * @param {string} contents to be decrypted
+     * @returns {Promise<FileMetadata>} with contents decrypted
+     */
+    async loadFilePostProcess(fileMetadata, contents){
+        var decrypted = undefined;
+        try{
+            decrypted = this.openSSLAESDecrypt(contents, fileMetadata.password);
+            fileMetadata.contents = decrypted;
+        }catch(decryptError){
+            fileMetadata.contents = undefined;
+            console.error(decryptError);
+            fileMetadata.error = new FileOperationError("Invalid password.", true)
+        }                
+        return fileMetadata;        
     }
 
     /**
