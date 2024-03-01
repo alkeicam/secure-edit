@@ -367,13 +367,18 @@ class FileManager {
         // encrypt file contents
         const base64String = this.openSSLAESEncryptBase64(contents, fileMetadata.password);
 
-        let remoteURL = persistentStore.preferences().remoteBaseURL || "https://httpbin.org/post";
-        let remotePath = `/${fileMetadata.id}`;
+        let remoteURL = persistentStore.preferences().remoteBaseURL || "http://localhost:7071/resource";
+        let remoteUniqueId = persistentStore.myUniqueId();
+        let remotePath = `/${remoteUniqueId}/${fileMetadata.id}`;
         remoteURL += remotePath;
+
+        var headers = {
+            Authorization: "ApiKey-v1 ak1"
+        }
         
-        const response = await fetch(remoteURL, {method: 'POST', body: base64String});
-        // this.checkValidFetchResponse(response);
-        // const responseData = await response.json();
+        const response = await fetch(remoteURL, {method: 'POST', body: base64String, headers: headers});
+        this.checkValidFetchResponse(response);
+        const responseData = await response.json();
 
         fileMetadata.path = remotePath;
         fileMetadata.fullPath = remoteURL;
@@ -481,7 +486,7 @@ class FileManager {
      */
     async prepareFileId(fileMetadata){
         // generate a unique if to read the file in the future
-        const fileId = `fid_${Math.random().toString(36).substring(2, 12)}${Math.random().toString(36).substring(2, 12)}`;
+        const fileId = `${Math.random().toString(36).substring(2, 8)}`;
         fileMetadata.id = fileId;
 
         return fileMetadata;

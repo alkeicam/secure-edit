@@ -114,6 +114,18 @@ class PersistentStore{
         return this.store.get("preferences")||{};
     }
 
+    myUniqueId(){
+        const prefs = this.store.get("preferences")||{};
+        if(!prefs.myId){
+            // first time, generate my unique id
+            const id = `i_${Math.random().toString(36).substring(2, 12)}`
+            prefs.myId = id;
+            this.savePreferences(prefs);        
+        }
+
+        return prefs.myId;
+    }
+
 
     purge(){
         this._setupRecents();        
