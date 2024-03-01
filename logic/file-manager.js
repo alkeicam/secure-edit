@@ -38,7 +38,8 @@ function FileOperationError(message, notify) {
 class FileManager {
     constructor(){
         this.CONST = {
-            REMOTE_PREFIX: "remote://"
+            REMOTE_PREFIX: "remote://",
+            API_KEY: process.env.API_KEY
         }
     }
     static getInstance(){
@@ -367,13 +368,13 @@ class FileManager {
         // encrypt file contents
         const base64String = this.openSSLAESEncryptBase64(contents, fileMetadata.password);
 
-        let remoteURL = persistentStore.preferences().remoteBaseURL || "http://localhost:7071/resource";
+        let remoteURL = persistentStore.preferences().remoteBaseURL || process.env.API_BASE_URL;
         let remoteUniqueId = persistentStore.myUniqueId();
         let remotePath = `/${remoteUniqueId}/${fileMetadata.id}`;
         remoteURL += remotePath;
 
         var headers = {
-            Authorization: "ApiKey-v1 ak1"
+            Authorization: `ApiKey-v1 ${this.CONST.API_KEY}`
         }
         
         const response = await fetch(remoteURL, {method: 'POST', body: base64String, headers: headers});
@@ -386,6 +387,8 @@ class FileManager {
         fileMetadata.contents = contents;
 
         return fileMetadata;
+    
+        
     }
 
     /**
@@ -492,7 +495,7 @@ class FileManager {
         return fileMetadata;
     }
 
-    async checkValidFetchResponse(response){
+    checkValidFetchResponse(response){
         if (!response.ok) 
             throw new Error(`Communication error ${response.status} ${response.statusText}`)
     }
