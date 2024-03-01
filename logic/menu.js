@@ -49,7 +49,8 @@ class AppMenu {
                     label: 'Open',
                     accelerator: "CmdOrCtrl+O",
                     click: async (data) => {
-                        const fileContents = await that.fileManager.loadFile();
+                        // here we "open" the file but as we don't know yet which file there is no metadata at this moment
+                        const fileContents = await that.fileManager.loadFile({});
                         const wins = BrowserWindow.getAllWindows();
                         BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);   
                         
@@ -212,7 +213,7 @@ class AppMenu {
             recentMenuItem.submenu.push({
                 label: item.label,
                 click: async () => {
-                    const fileContents = await that.fileManager.loadFile(item.fullPath);
+                    const fileContents = await that.fileManager.loadFile(item);
                     BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);                                        
                     that.addRecent({
                         label: fileContents.fileName,

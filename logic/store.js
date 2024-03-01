@@ -17,6 +17,7 @@
 
 const Store = require('electron-store');
 
+const {secureDecorator} = require("./decorators")
 
 class PersistentStore{
     constructor(){
@@ -51,14 +52,15 @@ class PersistentStore{
 
     /**
      * 
-     * @param {RecentItem} remoteItem 
+     * @param {FileMetadataSecure} remoteItem 
      */
     addRemote(remoteItem){
         const remotes = this.store.get("remotes");
         // we eventually going to replace record so remove if old exists
         const newRemotes = remotes.filter((item)=>item.fullPath!=remoteItem.fullPath);
-        remotes.push(remoteItem);
-        this.store.set("remotes",remotes);
+        newRemotes.push(remoteItem);
+        this.store.set("remotes",newRemotes);
+        console.log(newRemotes)
     }
 
     /**
@@ -71,7 +73,7 @@ class PersistentStore{
 
     /**
      * 
-     * @returns {RecentItem[]}
+     * @returns {FileMetadataSecure[]}
      */
     remotes(){
         return this.store.get("remotes");
@@ -133,4 +135,6 @@ class PersistentStore{
     }
 }
 
-module.exports = PersistentStore.getInstance();
+let storeInstance = PersistentStore.getInstance();
+storeInstance.addRemote = secureDecorator(storeInstance.addRemote, "id, fileName, path, fullPath, destination")
+module.exports = storeInstance;

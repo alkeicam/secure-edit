@@ -19,6 +19,16 @@ const persistentStore = require("./store")
  * @property {Object} error - when not empty then there was an error during item operation
  */
 
+/**
+ * Information about file without parts that affect privacy/security
+ * @typedef {Object} FileMetadataSecure
+ * @property {string} id - unique if of the file, created when file is saved
+ * @property {string} fileName - name of the file
+ * @property {string} path - path to file, starts with "remote://" for remote one
+ * @property {string} fullPath - full path to file
+ * @property {"local"|"remote"} destination - "local" or "remote"
+ */
+
 
 function FileOperationError(message, notify) {
     this.message = message;
@@ -71,11 +81,20 @@ class FileManager {
 
     /**
      * 
-     * @param {*} fileFullPath 
-     * @returns {Promise<FileMetadata>} returns file metadata
+     * @param {FileMetadata} fileMetadata metadata without contents 
+     * @returns {Promise<FileMetadata>} returns full file metadata with contents
      */
-    async loadFile(fileFullPath){
+    async loadFile(fileMetadata){
         // console.log("Internal load file")
+
+        if(this._isNewFileMetadata(fileMetadata)){
+            // we need to show file picker for user to choose which file to opern as we don't have file metadata
+            fileMetadata = await this.prepareOpenLocal(fileMetadata);
+        }
+
+        fileMetadata = this.preparePassword(fileMetadata);
+
+
     
         let contents = ``;
         let contentsPath = fileFullPath;
@@ -199,6 +218,43 @@ class FileManager {
         // })
     }
 
+    /**
+     * 
+     * @param {FileMetadata} fileMetadata 
+     * @returns {Promise<FileMetadata>} updated file metadata with selected file path
+     */
+    async prepareOpenLocal(fileMetadata){
+        // no file location provided so open dialog
+        const result = await dialog.showOpenDialog({
+            properties: ['openFile', 'openDirectory']
+        });
+        
+        if(result.canceled){
+            console.log("cancelled save" );
+            throw new FileOperationError("Open cancelled", false);
+        }else{
+            fileMetadata.fullPath = result.filePaths[0];
+        }
+                        
+        return fileMetadata;
+    }
+
+    async prepareOpenRemote(fileMetadata){
+        // no file location provided so open dialog
+        const result = await dialog.showOpenDialog({
+            properties: ['openFile', 'openDirectory']
+        });
+        
+        if(result.canceled){
+            console.log("cancelled save" );
+            throw new FileOperationError("Open cancelled", false);
+        }else{
+            fileMetadata.fullPath = result.filePaths[0];
+        }
+                        
+        return fileMetadata;
+    }
+
     _isNewFileMetadata(fileMetadata){
         if(!fileMetadata)
             throw new Error("Invalid file metadata")
@@ -272,7 +328,12 @@ class FileManager {
             fileMetadata = await this.preparePassword(fileMetadata);
         }      
         
-        return this.saveContentsRemote(contents, fileMetadata);
+        fileMetadata = await this.saveContentsRemote(contents, fileMetadata);
+
+        persistentStore.addRemote(fileMetadata);
+
+        return fileMetadata;
+
     }
 
     /**
@@ -311,8 +372,8 @@ class FileManager {
         remoteURL += remotePath;
         
         const response = await fetch(remoteURL, {method: 'POST', body: base64String});
-        this.checkValidFetchResponse(response);
-        const responseData = await response.json();
+        // this.checkValidFetchResponse(response);
+        // const responseData = await response.json();
 
         fileMetadata.path = remotePath;
         fileMetadata.fullPath = remoteURL;
