@@ -273,7 +273,9 @@ class FileManager {
         const resourceItem = responseData.item;
         const contents = resourceItem.contents;
         
-        fileMetadata.contents = contents;
+        const buff = Buffer.from(contents, "base64");
+
+        fileMetadata.contents = buff;
 
         return fileMetadata;    
     }
