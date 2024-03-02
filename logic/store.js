@@ -1,19 +1,13 @@
 /**
  * Recently open file item
  * @typedef {Object} RecentItem
- * @property {string} label - label/name of the file.
- * @property {string} fullPath - full absolute path to file
+ * @property {string} label - label/name of the file. 
+ * @property {string} fullPath - full absolute path to file 
  * @property {"remote"|"local"} destination - file destination
  * @property {number} ttl - time when this recent expires
  */
 
-/**
- * Recently open file item
- * @typedef {Object} RemoteItem
- * @property {string} label - label/name of the file.
- * @property {string} fullPath - full absolute path to file
- * @property {number} ttl - time when this recent expires
- */
+
 
 const Store = require('electron-store');
 
@@ -48,6 +42,16 @@ class PersistentStore{
         newRecents.unshift(recent);
         this.store.set("recents",newRecents);
         this._expiry();        
+    }
+
+    /**
+     * 
+     * @param {*} fullPath 
+     * @returns {FileMetadataSecure}
+     */
+    remoteByFullPath(fullPath){
+        const remotes = this.store.get("remotes");
+        return remotes.find(item=>item.fullPath == fullPath)
     }
 
     /**

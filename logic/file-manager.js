@@ -275,7 +275,13 @@ class FileManager {
         
         const buff = Buffer.from(contents, "base64");
 
-        fileMetadata.contents = buff;
+        fileMetadata.contents = buff;        
+        
+        const remoteMetadata = persistentStore.remoteByFullPath(remoteURL);
+        fileMetadata.path = remoteMetadata.path;
+        fileMetadata.fileName = remoteMetadata.fileName;
+        fileMetadata.id = remoteMetadata.id;
+        
 
         return fileMetadata;    
     }
@@ -291,10 +297,11 @@ class FileManager {
         try{
             decrypted = this.openSSLAESDecrypt(contents, fileMetadata.password);
             fileMetadata.contents = decrypted;
+            fileMetadata.error = decrypted?undefined:new FileOperationError("Invalid password.", true);
         }catch(decryptError){
             fileMetadata.contents = undefined;
-            console.error(decryptError);
-            fileMetadata.error = new FileOperationError("Invalid password.", true)
+            console.error(decryptError);            
+            fileMetadata.error = new FileOperationError("Invalid password.", true);
         }                
         return fileMetadata;        
     }
@@ -315,6 +322,9 @@ class FileManager {
             throw new FileOperationError("Open cancelled", false);
         }else{
             fileMetadata.fullPath = result.filePaths[0];
+            fileMetadata.destination = "local"
+            fileMetadata.fileName = path.parse(fileMetadata.fullPath).base
+            fileMetadata.path = path.parse(fileMetadata.fullPath).dir
         }
                         
         return fileMetadata;
@@ -519,10 +529,10 @@ class FileManager {
      * @param {FileMetadata} fileMetadata 
      * @return {Promise<FileMetadata>} file metadata with updated password
      */
-    async preparePassword(fileMetadata){
+    async preparePassword(fileMetadata, title){
 
         const password = await prompt({
-            title: 'Lock file',
+            title: title||'Lock/Unlock File',
             label: 'Password:',            
             inputAttrs: {
                 type: 'password'
