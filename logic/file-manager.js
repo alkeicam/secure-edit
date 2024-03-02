@@ -469,7 +469,7 @@ class FileManager {
         
         const response = await fetch(remoteURL, {method: 'POST', body: base64String, headers: headers});
         this.checkValidFetchResponse(response);
-        const responseData = await response.json();
+        // const responseData = await response.json();
 
         fileMetadata.path = remotePath;
         fileMetadata.fullPath = remoteURL;
