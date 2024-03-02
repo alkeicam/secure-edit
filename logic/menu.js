@@ -158,6 +158,11 @@ class AppMenu {
             //   ]
             // },
             {
+              id: 'remotes',
+              label: '☁ Remotes',
+              submenu: []
+            },
+            {
               role: 'help',
               submenu: [
                 {
@@ -192,7 +197,7 @@ class AppMenu {
     }
 
     updateMenu(){
-        const menu = Menu.buildFromTemplate(this.template(this.store.recents()));
+        const menu = Menu.buildFromTemplate(this.template(this.store.recents(), this.store.remotes()));
         Menu.setApplicationMenu(menu);
     }
 
@@ -200,9 +205,10 @@ class AppMenu {
     /**
      * Generates app menu configuration
      * @param {RecentItem[]} recents to be populated into "Recents" submenu
+     * @param {FileMetadataSecure[]} remotes to be populated into "Remotes" submenu
      * @returns menu configuration
      */
-    template(recents){
+    template(recents, remotes){
         const that = this;
         
         const recentMenuItem = this.configuration.find((item)=>item.id == "file").submenu.find((item)=>item.id == "recent");
@@ -211,7 +217,7 @@ class AppMenu {
         
         recents?.forEach((item)=>{
             recentMenuItem.submenu.push({
-                label: item.label,
+                label: item.destination&&item.destination == "remote"?`☁ ${item.label}`:`💾 ${item.label}`,
                 click: async () => {
                     const fileContents = await that.fileManager.loadFile(item);
                     BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);                                        
@@ -236,6 +242,27 @@ class AppMenu {
         }
 
         // const mySearchMenuItem = this.configuration.find((item)=>item.id == "edit").submenu.find((item)=>item.id == "mySearch");
+
+        const remotesMenuItm = this.configuration.find((item)=>item.id == "remotes");
+
+        remotesMenuItm.submenu = [];
+
+        remotes?.forEach((item)=>{
+          remotesMenuItm.submenu.push({
+            label: `${item.fileName} (${item.fullPath})`,
+            click: async (evt, e) => {
+              const fileContents = await that.fileManager.loadFile(item);
+              BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);                                        
+              that.addRecent({
+                  label: fileContents.fileName,
+                  fullPath: fileContents.fullPath,
+                  destination: fileContents.destination
+              })                  
+            }
+          })
+        })
+
+        
 
             
         return this.configuration;
