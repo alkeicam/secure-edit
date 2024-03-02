@@ -1,6 +1,6 @@
 {
   "name": "secure-edit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Secure Text Editor with AES Encryption",
   "main": "main.js",
   "productName": "SecureEdit",
@@ -64,7 +64,7 @@
     "@types/three": "^0.137.0",
     "@types/node": "17.0.23",
     "electron-builder": "23.6.0",
-    "electron": "^20.1.0" 
+    "electron": "^20.1.0"
   },
   "dependencies": {
     "electron-store": "8.1.0",
