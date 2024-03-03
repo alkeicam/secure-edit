@@ -44,6 +44,8 @@ class ElectronApp {
 
         ipcMain.handle('seapi_removeRemote', (electronEE, fileMetadataSecure)=>{
             store.removeRemote(fileMetadataSecure);
+            store.removeRecent(fileMetadataSecure);
+            that.menu.updateMenu();
             return store.remotes();
         });
         

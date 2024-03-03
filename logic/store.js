@@ -44,6 +44,13 @@ class PersistentStore{
         this._expiry();        
     }
 
+    removeRecent(recent){                
+        const recents = this.store.get("recents")
+        const newRecents = recents.filter((item)=>item.fullPath!=recent.fullPath);        
+        this.store.set("recents",newRecents);
+        this._expiry();        
+    }
+
     /**
      * 
      * @param {*} fullPath 
