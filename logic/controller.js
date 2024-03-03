@@ -18,14 +18,23 @@ function handleUIEvent (eventName, data){
             break;
     }
 }
-// 
+
+// RENDERER -> MAIN with response going back to RENDERER
+// handle calls from renderer, process in main process and provide response to the renderer process
+// so this is api provided by the main process to the renderer process
 ipcMain.handle('seapi_saveFile', (electronEE, ...args)=>{return fileManager.saveFile(...args)});
 ipcMain.handle('seapi_loadFile', (electronEE, ...args)=>{return fileManager.loadFile(...args)});
 ipcMain.handle('seapi_editorUIEvent', (electronEE, ...args)=>{return handleUIEvent(...args)});
 
 
 
+// RENRER->MAIN (no response)
 // receive responses from application listeners
+
+// is is important to note that the first argument passed on to callback
+// is the _event object which holds a channel to main process via
+// _event.sender.send() method. As a result when there is a ipcMain.on() accompanying it will be
+// called.
 ipcMain.on('listener_saveFile_response', async (_event, contents, fileMetadata) => {    
     const fileContents = await fileManager.saveFile(contents, fileMetadata);     
     // and send back data about save file

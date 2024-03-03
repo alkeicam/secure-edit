@@ -1,33 +1,37 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld('electronAPI', {
-  bOrganizations: () => ipcRenderer.invoke('db:organizations'),
-  bOrganization: (organizationId) => ipcRenderer.invoke('db:organization', organizationId),
-  bUsers: (organizationId) => ipcRenderer.invoke('db:users', organizationId),
-  bUser: (organizationId, userId) => ipcRenderer.invoke('db:user', organizationId, userId),
-  bOrganizationStructure: (organizationId) => ipcRenderer.invoke('db:organizationStructure', organizationId),
-  bOrganizationTypes: (organizationId) => ipcRenderer.invoke('db:organizationTypes', organizationId),
-  bUserPermissions: (organizationId, userId) => ipcRenderer.invoke('db:userPermissions', organizationId, userId),
-  bType: (organizationId, typeId) => ipcRenderer.invoke('db:type', organizationId, typeId),
+contextBridge.exposeInMainWorld('electronAPI', {  
 
-  bProcessMappings: (organizationId) => ipcRenderer.invoke('db:processMappings',organizationId),
-  bProcess: (organizationId, code) => ipcRenderer.invoke('db:process', organizationId, code),
-  bPutProcess: (organizationId, code, item) => ipcRenderer.invoke('db:putProcess', organizationId, code, item),
-  
-  bPutDiagram: (organizationId, code, diagramJsonString) => ipcRenderer.invoke('db:putDiagram',organizationId, code, diagramJsonString),
-  bDiagram: (organizationId, code) => ipcRenderer.invoke('db:diagram',organizationId, code),
+  // RENDERER->MAIN
+  // one way only, with no response
+  // should be accompanied by ipcMain.on() in 
+  // the controller file
+  // seNotifyAPI: {
+  //   doSth: (someData) => ipcRenderer.send("channel", someData)
+  // }
 
-  bPutStatus: (organizationId, code, item) => ipcRenderer.invoke('db:putStatus', organizationId, code, item), 
-  bPutTransition: (organizationId, code, item) => ipcRenderer.invoke('db:putTransition', organizationId, code, item), 
-  bPutAction: (organizationId, code, item) => ipcRenderer.invoke('db:putAction', organizationId, code, item),
-  bPutTransitionAction: (organizationId, item) => ipcRenderer.invoke('db:putTransitionAction', organizationId, item),
-
+  // RENDERER->MAIN with result coming back to RENDERER
+  // here we provide a request-response communication between renderer and main with
+  // main returning data to renderer as a result of method call
+  // methods that handle renderer's calls are in the "controller" file
   seAPI: {
     saveFile: (content, fileFullPath) => ipcRenderer.invoke('seapi_saveFile', content, fileFullPath),
     loadFile: () => ipcRenderer.invoke('seapi_loadFile'),
     editorUIEvent: (eventName, data) => ipcRenderer.invoke('seapi_editorUIEvent', eventName, data)
   },
-  // here we send data to callback functions in renderer/view js 
+
+  // MAIN->RENDERER
+  // here we send data to callback functions in renderer/view js from
+  // the main process via webContents.send() method
+  // these methods are used in the "js" files where renderer process
+  // subscribes itself with callback to receive notifications from main process.
+  // So somewhere in the main there is a call to webContents.send(),
+  // then ipcRenderer reacts to the events and dispatches data to the 
+  // listener in the renderer process that is handling data
+  // is is important to note that the first argument passed on to callback
+  // is the _event object which holds a channel to main process via
+  // _event.sender.send() method. As a result when there is a ipcMain.on() accompanying it will be
+  // called.
   listenerAPI: {
     onNewFile: (callback) => ipcRenderer.on('listener_newFile', callback),    
     onSaveFile: (callback) => ipcRenderer.on('listener_saveFile', callback),
