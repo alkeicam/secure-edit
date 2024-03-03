@@ -3,9 +3,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-// fetch is used by grm api
-const fetch = require("node-fetch");
-
 const AppMenu = require("./logic/menu")
 
 
@@ -22,10 +19,23 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadFile('app/index.html')
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  const remotesWindow = new BrowserWindow({    
+    parent: mainWindow, 
+    modal: true, 
+    show: false,
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
 
-  const appMenu = new AppMenu(mainWindow);
+  remotesWindow.loadFile('app/remotes.html')
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools()
+  remotesWindow.webContents.openDevTools()
+
+  const appMenu = new AppMenu(mainWindow, remotesWindow);
   appMenu.updateMenu();
   
 //   Menu.setApplicationMenu(Menu.buildFromTemplate([
@@ -51,6 +61,8 @@ app.whenReady().then(() => {
 
   // logic  
   require("./logic/controller")
+  const {remotesWindowController} = require("./logic/controller")
+  remotesWindowController.init(remotesWindow);
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

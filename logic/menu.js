@@ -13,7 +13,10 @@ const isMac = process.platform === 'darwin'
 
 
 class AppMenu {
-    constructor(){
+    constructor(mainWindow, remotesWindow){      
+        this.mainWindow = mainWindow;
+        this.remotesWindow = remotesWindow;
+
         this.id = `${Math.random().toString(36).substring(2, 8)}`;
         
         // console.log(`with main window ${mainWindow.id}`);
@@ -236,7 +239,7 @@ class AppMenu {
             recentMenuItem.submenu.push({
                 label: "Clear recents",
                 click: async () => {
-                    that._clearRecents();
+                  that._clearRecents();
                 }
             })
         }
@@ -259,8 +262,19 @@ class AppMenu {
                   destination: fileContents.destination
               })                  
             }
-          })
+          })          
         })
+
+        if(remotesMenuItm.submenu.length>0){
+          remotesMenuItm.submenu.push({ type: 'separator' });    
+          remotesMenuItm.submenu.push({
+                label: "Manage remotes",
+                click: async () => {
+                  that.remotesWindow.show();
+                }
+            })
+        }
+
 
         
 

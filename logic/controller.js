@@ -28,6 +28,15 @@ ipcMain.handle('seapi_editorUIEvent', (electronEE, ...args)=>{return handleUIEve
 
 
 
+class RemotesWindowController {
+    init(remotesWindow){
+        ipcMain.handle('seapi_closeRemotesWindow', (electronEE, ...args)=>{
+            remotesWindow.close();
+        })
+    }
+}
+
+
 // RENRER->MAIN (no response)
 // receive responses from application listeners
 
@@ -49,4 +58,8 @@ ipcMain.on('listener_saveFile_response', async (_event, contents, fileMetadata) 
         destination: fileContents.destination
     })
 })
+
+module.exports = {
+    remotesWindowController: new RemotesWindowController()
+}
 

@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   seAPI: {
     saveFile: (content, fileFullPath) => ipcRenderer.invoke('seapi_saveFile', content, fileFullPath),
     loadFile: () => ipcRenderer.invoke('seapi_loadFile'),
-    editorUIEvent: (eventName, data) => ipcRenderer.invoke('seapi_editorUIEvent', eventName, data)
+    editorUIEvent: (eventName, data) => ipcRenderer.invoke('seapi_editorUIEvent', eventName, data),
+    closeRemotesWindow: () => ipcRenderer.invoke('seapi_closeRemotesWindow'),
   },
 
   // MAIN->RENDERER
