@@ -349,7 +349,7 @@ class FileManager {
     _isNewFileMetadata(fileMetadata){
         if(!fileMetadata)
             throw new Error("Invalid file metadata")
-        return Object.keys(fileMetadata).length === 0;
+        return !fileMetadata.fullPath
     }
 
     /**

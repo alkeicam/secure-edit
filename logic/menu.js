@@ -13,9 +13,9 @@ const isMac = process.platform === 'darwin'
 
 
 class AppMenu {
-    constructor(mainWindow, remotesWindow){      
-        this.mainWindow = mainWindow;
-        this.remotesWindow = remotesWindow;
+    constructor(app){      
+        this.app = app;
+        
 
         this.id = `${Math.random().toString(36).substring(2, 8)}`;
         
@@ -270,7 +270,7 @@ class AppMenu {
           remotesMenuItm.submenu.push({
                 label: "Manage remotes",
                 click: async () => {
-                  that.remotesWindow.show();
+                  that.app.showRemotesWindow()
                 }
             })
         }

@@ -28,15 +28,6 @@ ipcMain.handle('seapi_editorUIEvent', (electronEE, ...args)=>{return handleUIEve
 
 
 
-class RemotesWindowController {
-    init(remotesWindow){
-        ipcMain.handle('seapi_closeRemotesWindow', (electronEE, ...args)=>{
-            remotesWindow.close();
-        })
-    }
-}
-
-
 // RENRER->MAIN (no response)
 // receive responses from application listeners
 
@@ -44,22 +35,19 @@ class RemotesWindowController {
 // is the _event object which holds a channel to main process via
 // _event.sender.send() method. As a result when there is a ipcMain.on() accompanying it will be
 // called.
-ipcMain.on('listener_saveFile_response', async (_event, contents, fileMetadata) => {    
-    const fileContents = await fileManager.saveFile(contents, fileMetadata);     
-    // and send back data about save file
-    _event.sender.send('listener_saveFile_success', fileContents);
+// ipcMain.on('listener_saveFile_response', async (_event, contents, fileMetadata) => {    
+//     const fileContents = await fileManager.saveFile(contents, fileMetadata);     
+//     // and send back data about save file
+//     _event.sender.send('listener_saveFile_success', fileContents);
     
-    if(fileContents.error) return;
-    // on success save add newly saved file to recent's list
-    const appMenu = new AppMenu();
-    appMenu.addRecent({
-        label: fileContents.fileName,
-        fullPath: fileContents.fullPath,
-        destination: fileContents.destination
-    })
-})
+//     if(fileContents.error) return;
+//     // on success save add newly saved file to recent's list
+//     const appMenu = new AppMenu();
+//     appMenu.addRecent({
+//         label: fileContents.fileName,
+//         fullPath: fileContents.fullPath,
+//         destination: fileContents.destination
+//     })
+// })
 
-module.exports = {
-    remotesWindowController: new RemotesWindowController()
-}
 
