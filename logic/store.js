@@ -64,7 +64,14 @@ class PersistentStore{
         const newRemotes = remotes.filter((item)=>item.fullPath!=remoteItem.fullPath);
         newRemotes.push(remoteItem);
         this.store.set("remotes",newRemotes);
-        console.log(newRemotes)
+        // console.log(newRemotes)
+    }
+
+    removeRemote(remoteItem){
+        const remotes = this.store.get("remotes");
+        // remove item
+        const newRemotes = remotes.filter((item)=>item.fullPath!=remoteItem.fullPath);        
+        this.store.set("remotes",newRemotes);
     }
 
     /**

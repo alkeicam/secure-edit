@@ -3,6 +3,7 @@ const path = require('path')
 const { BrowserWindow } = require('electron')
 const { ipcMain } = require('electron')
 const FileManager = require("./file-manager");
+const store = require("./store")
 
 
 class ElectronApp {
@@ -36,6 +37,16 @@ class ElectronApp {
                 destination: fileContents.destination
             })
         })
+
+        ipcMain.handle('seapi_getRemotes', (electronEE, ...args)=>{
+            return store.remotes();
+        });
+
+        ipcMain.handle('seapi_removeRemote', (electronEE, fileMetadataSecure)=>{
+            store.removeRemote(fileMetadataSecure);
+            return store.remotes();
+        });
+        
 
         
         this.showMain();
@@ -86,7 +97,7 @@ class ElectronApp {
         
         remotesWindow.loadFile('app/remotes.html')
         this.remotesWindow = remotesWindow;
-
+        remotesWindow.webContents.openDevTools()
         
     }
 
