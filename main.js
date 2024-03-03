@@ -1,68 +1,28 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
-const AppMenu = require("./logic/menu")
+const { app } = require('electron')
+const { BrowserWindow } = require('electron')
+const ElectronApp = require('./logic/electron-app')
+
+const electronApp = new ElectronApp();
 
 
-const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({    
-    width: 1600,
-    height: 1240,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-
-  // and load the index.html of the app.
-  mainWindow.loadFile('app/index.html')
-
-  const remotesWindow = new BrowserWindow({    
-    parent: mainWindow, 
-    modal: true, 
-    show: false,
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-
-  remotesWindow.loadFile('app/remotes.html')
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools()
-  remotesWindow.webContents.openDevTools()
-
-  const appMenu = new AppMenu(mainWindow, remotesWindow);
-  appMenu.updateMenu();
-  
-//   Menu.setApplicationMenu(Menu.buildFromTemplate([
-//     {
-//         label: app.getName(),
-//         submenu: [
-//             {label: 'Quit', role: 'quit'  }]
-//     }
-// ]))
-}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  electronApp.start();  
 
   app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) electronApp.start();
   })
 
   // logic  
-  require("./logic/controller")
-  const {remotesWindowController} = require("./logic/controller")
-  remotesWindowController.init(remotesWindow);
+  require("./logic/controller")  
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

@@ -1,4 +1,7 @@
 const AppMenu = require("./menu")
+const path = require('path')
+const { BrowserWindow } = require('electron')
+
 
 class ElectronApp {
     constructor(){
@@ -8,7 +11,16 @@ class ElectronApp {
     }
 
 
-    start(){}
+    start(){
+        this.createMainWindow();
+        this.createRemotesWindow();
+        this.createMenu();
+        this.showMain();
+    }
+
+    showMain(){
+        this.mainWindow.show();
+    }
 
     createMainWindow(){
         const mainWindow = new BrowserWindow({    
@@ -16,23 +28,24 @@ class ElectronApp {
             show: false,
             height: 1240,
             webPreferences: {
-              preload: path.join(__dirname, 'preload.js')
+              preload: path.join(__dirname, '../preload.js')
             }
           })
         
           // and load the index.html of the app.
           mainWindow.loadFile('app/index.html')
           this.mainWindow = mainWindow;
+          mainWindow.webContents.openDevTools()
     }
     createRemotesWindow(){
         const remotesWindow = new BrowserWindow({    
-            parent: mainWindow, 
+            parent: this.mainWindow, 
             modal: true, 
             show: false,
             width: 1200,
             height: 800,
             webPreferences: {
-              preload: path.join(__dirname, 'preload.js')
+              preload: path.join(__dirname, '../preload.js')
             }
           })
         
