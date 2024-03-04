@@ -28,11 +28,13 @@
       ]
     },
     "win": {
+      "icon": "app/build/icon.png",
       "publish": [
         "github"
       ]
     },
     "linux": {
+      "icon": "app/build/icon.png",
       "publish": [
         "github"
       ]
