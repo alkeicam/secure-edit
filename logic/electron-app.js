@@ -81,7 +81,7 @@ class ElectronApp {
         // and load the index.html of the app.
         mainWindow.loadFile('app/index.html')
         this.mainWindow = mainWindow;
-        mainWindow.webContents.openDevTools()
+        // mainWindow.webContents.openDevTools()
 
         
     }
@@ -99,7 +99,7 @@ class ElectronApp {
         
         remotesWindow.loadFile('app/remotes.html')
         this.remotesWindow = remotesWindow;
-        remotesWindow.webContents.openDevTools()
+        // remotesWindow.webContents.openDevTools()
         
     }
 

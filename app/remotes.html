@@ -30,47 +30,49 @@
 </head>
 
 <body id="app">        
-    <section class="section" style="padding: 0.5rem 0.5rem;">
+    <section class="section m-6" style="padding: 0.5rem 0.5rem;">
         <h3 class="title is-3">Manage remotes</h3>
-        <table class="table is-fullwidth is-striped mx-5">
-            <thead>
-                <tr>
-                    <th>Filename</th>                
-                    <th>Location</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-              <tr rv-each-item="model.remotes">
-                <th><span class="tag is-success mx-1">Secure</span>{item.fileName}</th>
-                <td>{item.fullPath}</td>
-                <td><a class="button is-danger is-small" rv-on-click="model.handlers.handleRemoveRemote">Delete</a></td>
-              </tr>              
-            </tbody>
-        </table>
-        <nav class="navbar is-light" role="navigation" aria-label="main navigation">                        
-            <div class="navbar-menu">
-                <div class="navbar-start">
-                    <!-- <a class="navbar-item">                        
-                    </a> -->
+        <div style="min-height: 70vh;">
+            <table class="table is-fullwidth is-striped mx-5">
+                <thead>
+                    <tr>
+                        <th>Filename</th>                
+                        <th>Location</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr rv-each-item="model.remotes">
+                    <th><span class="tag is-success mx-1">Secure</span>{item.fileName}</th>
+                    <td>{item.fullPath}</td>
+                    <td><a class="button is-danger is-small" rv-on-click="model.handlers.handleRemoveRemote">Delete</a></td>
+                </tr>              
+                </tbody>
+            </table>
+        </div>        
+    </section>
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">                        
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <!-- <a class="navbar-item">                        
+                </a> -->
 
-                </div>
-            
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <div class="buttons">
-                        <!-- <a class="button is-primary">
-                            <strong>Sign up</strong>
-                        </a> -->
-                        <a class="button is-info" rv-on-click="handleClose">
-                            Close
-                        </a>
-                        </div>
+            </div>
+        
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                    <!-- <a class="button is-primary">
+                        <strong>Sign up</strong>
+                    </a> -->
+                    <a class="button is-info" rv-on-click="handleClose">
+                        Close
+                    </a>
                     </div>
                 </div>
             </div>
-        </nav>
-    </section>
+        </div>
+    </nav>
     <script src="js/remotesController.js"></script>
     <script>
 
