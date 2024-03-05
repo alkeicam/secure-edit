@@ -4,6 +4,14 @@
 const { app } = require('electron')
 const { BrowserWindow } = require('electron')
 const ElectronApp = require('./logic/electron-app')
+var path = require('path');
+
+require('dotenv').config({
+  path: app.isPackaged
+      ? path.join(process.resourcesPath, '.env')
+      : path.resolve(process.cwd(), '.env'),
+})
+
 
 const electronApp = new ElectronApp();
 

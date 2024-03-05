@@ -38,7 +38,10 @@
       "publish": [
         "github"
       ]
-    }
+    },
+    "extraResources": [
+      ".env"
+    ]
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^6.1.0",
@@ -72,7 +75,8 @@
     "electron-store": "8.1.0",
     "node-fetch": "2.6.6",
     "crypto-js": "4.1.1",
-    "electron-prompt": "1.7.0"
+    "electron-prompt": "1.7.0",
+    "dotenv": "16.4.5"
   },
   "nyc": {
     "check-coverage": true,

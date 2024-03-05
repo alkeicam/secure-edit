@@ -6,6 +6,7 @@ var CryptoJS = require("crypto-js");
 const fetch = require("node-fetch");
 const persistentStore = require("./store")
 
+
 /**
  * Information about file
  * @typedef {Object} FileMetadata
