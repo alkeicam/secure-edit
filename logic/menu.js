@@ -61,6 +61,7 @@ class AppMenu {
                         // add recent only when open was successfull
                         that.addRecent({
                             label: fileContents.fileName,
+                            fileName: fileContents.fileName,
                             fullPath: fileContents.fullPath,
                             destination: fileContents.destination
                         })
@@ -219,13 +220,14 @@ class AppMenu {
 
         
         recents?.forEach((item)=>{
-            recentMenuItem.submenu.push({
+            recentMenuItem.submenu.push({              
                 label: item.destination&&item.destination == "remote"?`☁ ${item.label}`:`💾 ${item.label}`,
                 click: async () => {
                     const fileContents = await that.fileManager.loadFile(item);
                     BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);                                        
                     that.addRecent({
                         label: fileContents.fileName,
+                        fileName: fileContents.fileName,
                         fullPath: fileContents.fullPath,
                         destination: fileContents.destination
                     })
@@ -258,6 +260,7 @@ class AppMenu {
               BrowserWindow.fromId(1).webContents.send('listener_openFile', fileContents);                                        
               that.addRecent({
                   label: fileContents.fileName,
+                  fileName: fileContents.fileName,
                   fullPath: fileContents.fullPath,
                   destination: fileContents.destination
               })                  

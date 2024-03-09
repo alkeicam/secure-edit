@@ -33,6 +33,7 @@ class ElectronApp {
             
             that.menu.addRecent({
                 label: fileContents.fileName,
+                fileName: fileContents.fileName,
                 fullPath: fileContents.fullPath,
                 destination: fileContents.destination
             })

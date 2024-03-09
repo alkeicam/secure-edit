@@ -6,6 +6,8 @@ var CryptoJS = require("crypto-js");
 const fetch = require("node-fetch");
 const persistentStore = require("./store")
 
+const ProgressBar = require('electron-progressbar');
+
 
 /**
  * Information about file
@@ -97,10 +99,10 @@ class FileManager {
 
             fileMetadata = await this.preparePassword(fileMetadata);
 
-            if(fileMetadata.destination == "local"){
-                return this.loadFileLocal(fileMetadata)
-            }else{
+            if(fileMetadata.destination == "remote"){
                 return this.loadFileRemote(fileMetadata)
+            }else{
+                return this.loadFileLocal(fileMetadata)                
             }
 
         }catch(err){
@@ -251,9 +253,22 @@ class FileManager {
      * @returns {Promise<FileMetadata>} with contents
      */
     async loadFileRemote(fileMetadata){
-        fileMetadata = await this.loadContentsRemote(fileMetadata);
-
-        return this.loadFilePostProcess(fileMetadata, fileMetadata.contents);                
+        var progressBar = new ProgressBar({
+            text: 'Preparing file...',
+            detail: 'Downloading encrypted file to your computer...'
+        });
+        try{
+            fileMetadata = await this.loadContentsRemote(fileMetadata);
+            progressBar.detail = "Decrypting file locally..."
+            const result = this.loadFilePostProcess(fileMetadata, fileMetadata.contents);                
+            return result;
+        }catch(error){
+            progressBar.text = `Error occured ${error.message}`;            
+        }
+        finally{            
+            progressBar.setCompleted();
+        }
+        
     }
 
     /**

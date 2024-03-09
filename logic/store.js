@@ -2,6 +2,7 @@
  * Recently open file item
  * @typedef {Object} RecentItem
  * @property {string} label - label/name of the file. 
+ * @property {string} fileName - label/name of the file. 
  * @property {string} fullPath - full absolute path to file 
  * @property {"remote"|"local"} destination - file destination
  * @property {number} ttl - time when this recent expires
