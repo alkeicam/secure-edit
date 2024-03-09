@@ -433,13 +433,24 @@ class FileManager {
             fileMetadata = await this.prepareFilename(fileMetadata);
             // new file so ask for password
             fileMetadata = await this.preparePassword(fileMetadata);
-        }      
+        }
+
+        var progressBar = new ProgressBar({
+            text: 'Preparing file...',
+            detail: 'Encrypting file...'
+        });
+        try{
+                  
+            progressBar.detail = 'Sending encrypted file to cloud...';
+            fileMetadata = await this.saveContentsRemote(contents, fileMetadata);
+    
+            persistentStore.addRemote(fileMetadata);
+    
+            return fileMetadata;
+        }finally{
+            progressBar.setCompleted();
+        }
         
-        fileMetadata = await this.saveContentsRemote(contents, fileMetadata);
-
-        persistentStore.addRemote(fileMetadata);
-
-        return fileMetadata;
 
     }
 
