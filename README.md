@@ -43,6 +43,7 @@ Command line encrypt:
 5. Submit a pull request :D
 
 ## History
+* 1.1.8 CX fixes
 * 1.1.5 Remote file support, you can securely store files in the cloud instead on local disk
 * 1.1.0 HTML support (tables, formatting)
 * 1.0.11 Stabilization tweaks, docs update
