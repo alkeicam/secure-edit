@@ -330,7 +330,7 @@ class FileManager {
     async prepareOpenLocal(fileMetadata){
         // no file location provided so open dialog
         const result = await dialog.showOpenDialog({
-            properties: ['openFile', 'openDirectory']
+            properties: ['openFile']
         });
         
         if(result.canceled){
@@ -349,7 +349,7 @@ class FileManager {
     async prepareOpenRemote(fileMetadata){
         // no file location provided so open dialog
         const result = await dialog.showOpenDialog({
-            properties: ['openFile', 'openDirectory']
+            properties: ['openFile']
         });
         
         if(result.canceled){
