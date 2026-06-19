@@ -5,8 +5,8 @@ jobs:
   build_on_linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 14
     - name: install dependencies
@@ -16,9 +16,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run release
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: dist-linux
         path: |
             dist
             !dist/**/*.md
@@ -26,29 +26,8 @@ jobs:
   build_on_mac:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 14
-    - name: install dependencies
-      run: npm install
-    - name: build
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
-      run: npm run release
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: |
-            dist
-            !dist/**/*.md
-
-  build_on_win:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 14
     - name: install dependencies
@@ -58,9 +37,30 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run release
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: dist-mac
+        path: |
+            dist
+            !dist/**/*.md
+
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 14
+    - name: install dependencies
+      run: npm install
+    - name: build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npm run release
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-win
         path: |
             dist
             !dist/**/*.md
